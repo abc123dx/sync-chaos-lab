@@ -15,18 +15,18 @@ test("default scenario is valid and bounded", () => {
 });
 
 test("invalid client counts are rejected", () => {
-  assert.throws(() => normalizeConfig({ clientCount: 1 }), /between 2 and 10/);
-  assert.throws(() => normalizeConfig({ clientCount: 11 }), /between 2 and 10/);
+  assert.throws(() => normalizeConfig({ clientCount: 1 }), /2 到 10/);
+  assert.throws(() => normalizeConfig({ clientCount: 11 }), /2 到 10/);
 });
 
 test("invalid fault rates are rejected", () => {
   assert.throws(
     () => normalizeConfig({ network: { dropRate: 1.1 } }),
-    /between 0 and 1/,
+    /0 和 1/,
   );
   assert.throws(
     () => normalizeConfig({ network: { restartRate: -0.01 } }),
-    /between 0 and 1/,
+    /0 和 1/,
   );
 });
 

@@ -30,7 +30,7 @@ test("compiled CLI run report replays exactly in a fresh process", async () => {
       { encoding: "utf8" },
     );
     assert.equal(run.status, 0, run.stderr || run.stdout);
-    assert.match(run.stdout, /^CONVERGED automerge 3 replicas/m);
+    assert.match(run.stdout, /^已收敛（CONVERGED） automerge 3 个副本/m);
 
     const replay = spawnSync(
       process.execPath,
@@ -44,9 +44,22 @@ test("compiled CLI run report replays exactly in a fresh process", async () => {
     };
     assert.equal(
       replay.stdout.trim(),
-      `MATCH ${report.fingerprint} → ${report.fingerprint}`,
+      `回放一致（MATCH） ${report.fingerprint} → ${report.fingerprint}`,
     );
   } finally {
     await rm(directory, { force: true, recursive: true });
   }
+});
+
+test("compiled CLI help is Chinese-first while command names stay stable", () => {
+  const cliPath = resolve("dist/src/cli.js");
+  const help = spawnSync(process.execPath, [cliPath, "help"], {
+    encoding: "utf8",
+  });
+
+  assert.equal(help.status, 0, help.stderr || help.stdout);
+  assert.match(help.stdout, /Sync Chaos Lab 中文版 0\.1\.1/);
+  assert.match(help.stdout, /用法：/);
+  assert.match(help.stdout, /sync-chaos run \[options\]/);
+  assert.match(help.stdout, /确定性回放种子/);
 });

@@ -1,10 +1,9 @@
-# Contributing
+# 参与贡献
 
-Contributions that improve deterministic replay, add a documented CRDT adapter,
-strengthen the fault model or reduce a reproducible convergence bug are
-welcome.
+欢迎改进确定性回放、增加有文档的 CRDT 适配器、增强故障模型，或修复可重现的
+收敛问题。
 
-## Development
+## 开发
 
 ```bash
 npm ci
@@ -13,25 +12,24 @@ npm test
 npm run build
 ```
 
-Keep changes focused and add a regression seed when fixing simulation behavior.
-New adapters must implement the complete `ReplicaAdapter` contract and include
-tests for:
+请保持改动聚焦；修复模拟行为时，应增加相应的回归种子。新适配器必须完整实现
+`ReplicaAdapter` 契约，并包含以下测试：
 
-1. concurrent edit convergence;
-2. duplicate update idempotence;
-3. restart persistence;
-4. deterministic replay.
+1. 并发编辑收敛；
+2. 重复更新幂等；
+3. 重启状态持久；
+4. 确定性回放。
 
-## Design rules
+## 设计规则
 
-- No wall-clock values, random runtime IDs or machine metadata in fingerprints.
-- Keep JSON reports backward compatible within a schema version.
-- Escape all report content before inserting it into HTML.
-- Avoid network calls, telemetry and hidden persistence in the browser lab.
-- Document modeling shortcuts and unsupported production behavior.
+- fingerprint 中不得包含墙上时钟、运行时随机 ID 或机器元数据。
+- 同一个 schema 版本内，JSON 报告必须保持向后兼容。
+- 把报告内容写入 HTML 前必须完整转义。
+- 浏览器实验室不得加入网络调用、遥测或隐藏持久化。
+- 应明确记录建模取舍和未覆盖的生产行为。
+- 汉化展示不得改写 JSON 键、`engine` 值、事件代码或既有证据值。
 
-## Changes
+## 变更说明
 
-Use a concise commit subject and explain observable behavior changes in the
-pull request. Update `CHANGELOG.md` for user-facing features, report-schema
-changes or compatibility notes.
+提交标题应简洁，并在拉取请求中说明可观测行为变化。面向用户的功能、报告
+schema 变化或兼容性说明都应同步更新 `CHANGELOG.md`。

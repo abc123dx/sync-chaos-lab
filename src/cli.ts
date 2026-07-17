@@ -55,11 +55,11 @@ function numberOption(
   const value = options.get(name);
   if (value === undefined) return undefined;
   if (typeof value !== "string" || value.trim() === "") {
-    throw new Error(`--${name} expects a number`);
+    throw new Error(`--${name} 需要一个数字`);
   }
   const parsed = Number(value);
   if (!Number.isFinite(parsed)) {
-    throw new Error(`--${name} expects a finite number`);
+    throw new Error(`--${name} 需要一个有限数值`);
   }
   return parsed;
 }
@@ -71,7 +71,7 @@ function stringOption(
   const value = options.get(name);
   if (value === undefined) return undefined;
   if (typeof value !== "string") {
-    throw new Error(`--${name} expects a value`);
+    throw new Error(`--${name} 需要一个参数值`);
   }
   return value;
 }
@@ -88,7 +88,7 @@ async function scenarioFromOptions(
   const engine = stringOption(options, "engine");
   if (engine) {
     if (!isEngineName(engine)) {
-      throw new Error("--engine must be automerge or yjs");
+      throw new Error("--engine 必须是 automerge 或 yjs");
     }
     input.engine = engine;
   }
@@ -133,19 +133,19 @@ async function runCommand(options: Map<string, string | boolean>) {
   );
   await writeFile(output, serializeResult(result), "utf8");
   console.log(
-    `${result.converged ? "CONVERGED" : "DIVERGED"} ${result.config.engine} ` +
-      `${result.config.clientCount} replicas · ${result.events.length} events · ${result.fingerprint}`,
+    `${result.converged ? "已收敛（CONVERGED）" : "未收敛（DIVERGED）"} ${result.config.engine} ` +
+      `${result.config.clientCount} 个副本 · ${result.events.length} 个事件 · ${result.fingerprint}`,
   );
-  console.log(`JSON ${output}`);
+  console.log(`JSON 报告：${output}`);
   if (!result.converged) process.exitCode = 2;
 }
 
 async function replayCommand(path: string | undefined) {
-  if (!path) throw new Error("replay expects a JSON report path");
+  if (!path) throw new Error("replay 需要一个 JSON 报告路径");
   const previous = parseResult(await readFile(resolve(path), "utf8"));
   const replay = replayScenario(previous);
   console.log(
-    `${replay.matches ? "MATCH" : "MISMATCH"} ${previous.fingerprint} → ${replay.result.fingerprint}`,
+    `${replay.matches ? "回放一致（MATCH）" : "回放不一致（MISMATCH）"} ${previous.fingerprint} → ${replay.result.fingerprint}`,
   );
   if (!replay.matches) process.exitCode = 3;
 }
@@ -154,35 +154,35 @@ async function reportCommand(
   path: string | undefined,
   options: Map<string, string | boolean>,
 ) {
-  if (!path) throw new Error("report expects a JSON report path");
+  if (!path) throw new Error("report 需要一个 JSON 报告路径");
   const inputPath = resolve(path);
   const result = parseResult(await readFile(inputPath, "utf8"));
   const fallbackName = `${basename(inputPath, extname(inputPath))}.html`;
   const output = resolve(stringOption(options, "output") ?? fallbackName);
   await writeFile(output, renderHtmlReport(result), "utf8");
-  console.log(`HTML ${output}`);
+  console.log(`HTML 报告：${output}`);
 }
 
 function help(): string {
-  return `Sync Chaos Lab 0.1.0
+  return `Sync Chaos Lab 中文版 0.1.1
 
-Usage:
+用法：
   sync-chaos run [options]
   sync-chaos replay <result.json>
   sync-chaos report <result.json> [--output report.html]
 
-Run options:
-  --config <path>       Load a partial scenario JSON file
+run 选项：
+  --config <path>       载入部分场景配置 JSON 文件
   --engine <name>       automerge | yjs
-  --seed <value>        Deterministic replay seed
-  --clients <2..10>     Number of replicas
-  --steps <4..500>      Number of local edit ticks
-  --drop <0..1>         Random packet-loss rate
-  --duplicate <0..1>    Duplicate-delivery rate
-  --reorder <0..1>      Reorder-jitter rate
-  --restart <0..1>      Replica-restart rate per tick
-  --no-partition        Disable the deterministic network split
-  --output <path>       JSON output path
+  --seed <value>        确定性回放种子
+  --clients <2..10>     副本数量
+  --steps <4..500>      本地编辑逻辑时钟数
+  --drop <0..1>         随机丢包率
+  --duplicate <0..1>    重复投递率
+  --reorder <0..1>      乱序抖动率
+  --restart <0..1>      每个逻辑时钟的副本重启率
+  --no-partition        关闭确定性网络分区
+  --output <path>       JSON 输出路径
 `;
 }
 
@@ -208,7 +208,7 @@ export async function runCli(argv: string[]): Promise<void> {
     await reportCommand(parsed.positionals[0], parsed.options);
     return;
   }
-  throw new Error(`Unknown command: ${parsed.command}\n\n${help()}`);
+  throw new Error(`未知命令：${parsed.command}\n\n${help()}`);
 }
 
 const invokedDirectly =
@@ -218,7 +218,7 @@ const invokedDirectly =
 if (invokedDirectly) {
   runCli(process.argv.slice(2)).catch((error: unknown) => {
     console.error(
-      `sync-chaos: ${error instanceof Error ? error.message : String(error)}`,
+      `sync-chaos 错误：${error instanceof Error ? error.message : String(error)}`,
     );
     process.exitCode = 1;
   });

@@ -4,27 +4,27 @@
     "seed": "partition-amber-42",
     "clientCount": 6,
     "steps": 28,
-    "focus": "partition plus duplicate delivery"
+    "focus": "网络分区与重复投递"
   },
   {
     "engine": "automerge",
     "seed": "total-loss-recovery-09",
     "clientCount": 4,
     "steps": 16,
-    "focus": "forced recovery after sustained loss"
+    "focus": "持续丢包后的强制恢复"
   },
   {
     "engine": "yjs",
     "seed": "replica-restart-slate-17",
     "clientCount": 5,
     "steps": 30,
-    "focus": "repeated replica restart"
+    "focus": "副本反复重启"
   },
   {
     "engine": "yjs",
     "seed": "reorder-violet-88",
     "clientCount": 10,
     "steps": 24,
-    "focus": "maximum replica count and reorder pressure"
+    "focus": "最大副本数量与乱序压力"
   }
 ]

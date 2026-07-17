@@ -54,7 +54,7 @@ type QueuedMessage = {
 
 function assertRate(name: string, value: number): void {
   if (!Number.isFinite(value) || value < 0 || value > 1) {
-    throw new Error(`${name} must be between 0 and 1`);
+    throw new Error(`${name} 必须介于 0 和 1 之间`);
   }
 }
 
@@ -71,17 +71,17 @@ export function normalizeConfig(input: ScenarioInput = {}): ScenarioConfig {
   };
 
   if (config.engine !== "automerge" && config.engine !== "yjs") {
-    throw new Error(`Unsupported engine: ${String(config.engine)}`);
+    throw new Error(`不支持的引擎：${String(config.engine)}`);
   }
   if (
     !Number.isInteger(config.clientCount) ||
     config.clientCount < 2 ||
     config.clientCount > 10
   ) {
-    throw new Error("clientCount must be an integer between 2 and 10");
+    throw new Error("clientCount 必须是 2 到 10 之间的整数");
   }
   if (!Number.isInteger(config.steps) || config.steps < 4 || config.steps > 500) {
-    throw new Error("steps must be an integer between 4 and 500");
+    throw new Error("steps 必须是 4 到 500 之间的整数");
   }
   assertRate("dropRate", network.dropRate);
   assertRate("duplicateRate", network.duplicateRate);
@@ -95,7 +95,7 @@ export function normalizeConfig(input: ScenarioInput = {}): ScenarioConfig {
     network.maxDelay > 100
   ) {
     throw new Error(
-      "Network delay must use integers with 0 <= minDelay <= maxDelay <= 100",
+      "网络延迟必须使用整数，且满足 0 <= minDelay <= maxDelay <= 100",
     );
   }
   return config;
@@ -194,7 +194,7 @@ export function runScenario(input: ScenarioInput = {}): SimulationResult {
 
   const clientById = (id: string): InternalClient => {
     const client = clients.find((candidate) => candidate.id === id);
-    if (!client) throw new Error(`Unknown client: ${id}`);
+    if (!client) throw new Error(`未知副本：${id}`);
     return client;
   };
 

@@ -24,11 +24,17 @@ test("invalid report schemas are rejected", () => {
 
 test("HTML reports are self-contained and include the fingerprint", () => {
   const result = runScenario({ seed: "html-report", steps: 10 });
+  const before = serializeResult(result);
   const html = renderHtmlReport(result);
   assert.match(html, /^<!doctype html>/);
+  assert.match(html, /<html lang="zh-CN">/);
+  assert.match(html, /最终判定/);
+  assert.match(html, /事件轨迹/);
+  assert.match(html, /全部 \d+ 个副本已收敛/);
   assert.match(html, new RegExp(result.fingerprint));
   assert.match(html, /id="sync-chaos-data"/);
   assert.doesNotMatch(html, /(?:src|href)=["']https?:/);
+  assert.equal(serializeResult(result), before);
 });
 
 test("HTML report escapes seed content and embedded JSON", () => {
@@ -56,6 +62,6 @@ test("prefix reducer finds the shortest monotonic reproducer", () => {
 test("prefix reducer rejects traces that do not reproduce", () => {
   assert.throws(
     () => reduceToReproducingPrefix([1, 2, 3], () => false),
-    /does not reproduce/,
+    /无法重现/,
   );
 });

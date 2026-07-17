@@ -144,7 +144,7 @@ function getYjsTypes(document: Y.Doc) {
   const counts = root.get("counts");
   const notes = root.get("notes");
   if (!(counts instanceof Y.Map) || !(notes instanceof Y.Array)) {
-    throw new Error("Yjs document is missing the expected shared types");
+    throw new Error("Yjs 文档缺少预期的共享类型");
   }
   return {
     root,
