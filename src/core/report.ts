@@ -3,6 +3,12 @@ import type {
   SimulationEvent,
   SimulationResult,
 } from "./types.js";
+import {
+  eventDetailZh,
+  eventKindLabelZh,
+  eventSummaryZh,
+  localizeDocumentText,
+} from "./locale.js";
 
 function escapeHtml(value: unknown): string {
   return String(value)
@@ -14,13 +20,14 @@ function escapeHtml(value: unknown): string {
 }
 
 function eventMarkup(event: SimulationEvent): string {
+  const detail = eventDetailZh(event);
   return `<li class="event event--${event.tone}" data-tone="${event.tone}">
     <div class="event__rail"><span></span></div>
     <div class="event__time">T${event.tick.toString().padStart(2, "0")}</div>
     <div class="event__body">
-      <div class="event__kind">${escapeHtml(event.kind.replaceAll("-", " "))}</div>
-      <strong>${escapeHtml(event.summary)}</strong>
-      ${event.detail ? `<p>${escapeHtml(event.detail)}</p>` : ""}
+      <div class="event__kind">${escapeHtml(eventKindLabelZh(event.kind))}</div>
+      <strong>${escapeHtml(eventSummaryZh(event))}</strong>
+      ${detail ? `<p>${escapeHtml(detail)}</p>` : ""}
     </div>
   </li>`;
 }
@@ -32,14 +39,14 @@ function clientMarkup(
   return `<article class="replica">
     <div class="replica__top">
       <span class="replica__index">${String(index + 1).padStart(2, "0")}</span>
-      <span class="replica__status">synced</span>
+      <span class="replica__status">已同步</span>
     </div>
     <h3>${escapeHtml(client.id)}</h3>
     <code>${escapeHtml(client.digest)}</code>
     <dl>
-      <div><dt>Counter</dt><dd>${client.snapshot.counter}</dd></div>
-      <div><dt>Notes</dt><dd>${client.snapshot.notes.length}</dd></div>
-      <div><dt>Restarts</dt><dd>${client.restartCount}</dd></div>
+      <div><dt>计数</dt><dd>${client.snapshot.counter}</dd></div>
+      <div><dt>记录</dt><dd>${client.snapshot.notes.length}</dd></div>
+      <div><dt>重启</dt><dd>${client.restartCount}</dd></div>
     </dl>
   </article>`;
 }
@@ -61,7 +68,7 @@ export function parseResult(text: string): SimulationResult {
     !Array.isArray(parsed.clients) ||
     typeof parsed.fingerprint !== "string"
   ) {
-    throw new Error("Input is not a Sync Chaos Lab schemaVersion 1 report");
+    throw new Error("输入内容不是 Sync Chaos Lab schemaVersion 1 报告");
   }
   return parsed as SimulationResult;
 }
@@ -72,12 +79,12 @@ export function renderHtmlReport(result: SimulationResult): string {
   const clients = result.clients.map(clientMarkup).join("\n");
 
   return `<!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
-  <title>Sync Chaos Lab · ${escapeHtml(result.config.engine)} · ${escapeHtml(result.config.seed)}</title>
+  <title>Sync Chaos Lab 中文版 · ${escapeHtml(result.config.engine)} · ${escapeHtml(result.config.seed)}</title>
   <style>
     :root{--ink:#f4f1e8;--muted:#9c9b92;--panel:#151714;--panel2:#1c1f1a;--line:#30342d;--acid:#c7f36b;--coral:#ff7f66;--amber:#f2c45c;--blue:#77b8ff}
     *{box-sizing:border-box}html{background:#090b09;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -113,45 +120,45 @@ export function renderHtmlReport(result: SimulationResult): string {
 <body>
   <main class="shell">
     <header>
-      <div class="brand">SYNC<span>/</span>CHAOS LAB</div>
+      <div class="brand">SYNC<span>/</span>CHAOS LAB · 中文版</div>
       <code class="fingerprint">${escapeHtml(result.fingerprint)}</code>
     </header>
     <section class="hero">
       <div>
-        <div class="eyebrow">Deterministic local-first experiment</div>
-        <h1>Faults happened.<br>State survived.</h1>
-        <p>${escapeHtml(result.config.engine)} ran ${result.config.steps} ticks across ${result.config.clientCount} replicas using seed <code>${escapeHtml(result.config.seed)}</code>. The trace includes partitions, packet faults, reordered delivery and replica recovery.</p>
+        <div class="eyebrow">确定性 Local-first 实验</div>
+        <h1>网络会故障，<br>状态仍可靠。</h1>
+        <p>${escapeHtml(result.config.engine)} 使用种子 <code>${escapeHtml(result.config.seed)}</code>，在 ${result.config.clientCount} 个副本上运行了 ${result.config.steps} 个逻辑时钟。事件轨迹涵盖网络分区、丢包、乱序投递与副本恢复。</p>
       </div>
       <aside class="verdict">
-        <span class="eyebrow">Final verdict</span>
-        <strong>${result.converged ? "CONVERGED" : "DIVERGED"}</strong>
-        <small>${result.stats.convergenceRounds} deterministic recovery round${result.stats.convergenceRounds === 1 ? "" : "s"} · ${toneCount(result.events, "fault")} fault events observed</small>
+        <span class="eyebrow">最终判定</span>
+        <strong>${result.converged ? "已收敛" : "未收敛"}</strong>
+        <small>${result.stats.convergenceRounds} 轮确定性恢复 · 观测到 ${toneCount(result.events, "fault")} 个故障事件</small>
       </aside>
     </section>
     <div class="metrics">
-      <div class="metric"><span>Local edits</span><strong>${result.stats.localChanges}</strong></div>
-      <div class="metric"><span>Delivered</span><strong>${result.stats.delivered}</strong></div>
-      <div class="metric"><span>Dropped</span><strong>${result.stats.dropped}</strong></div>
-      <div class="metric"><span>Reordered</span><strong>${result.stats.reordered}</strong></div>
-      <div class="metric"><span>Restarts</span><strong>${result.stats.restarts}</strong></div>
+      <div class="metric"><span>本地编辑</span><strong>${result.stats.localChanges}</strong></div>
+      <div class="metric"><span>已送达</span><strong>${result.stats.delivered}</strong></div>
+      <div class="metric"><span>已丢弃</span><strong>${result.stats.dropped}</strong></div>
+      <div class="metric"><span>已乱序</span><strong>${result.stats.reordered}</strong></div>
+      <div class="metric"><span>重启次数</span><strong>${result.stats.restarts}</strong></div>
     </div>
     <section>
-      <div class="section-head"><div><div class="eyebrow">Replica ledger</div><h2>Same state, independent histories.</h2></div><p>${escapeHtml(result.clients[0]?.snapshot.title ?? "")}</p></div>
+      <div class="section-head"><div><div class="eyebrow">副本台账</div><h2>历史各自独立，最终状态一致。</h2></div><p>${escapeHtml(localizeDocumentText(result.clients[0]?.snapshot.title ?? ""))}</p></div>
       <div class="replicas">${clients}</div>
     </section>
     <section>
       <div class="section-head">
-        <div><div class="eyebrow">Event trace</div><h2>${result.events.length} deterministic events</h2></div>
-        <div class="filters" aria-label="Filter trace">
-          <button class="active" data-filter="all">All</button>
-          <button data-filter="fault">Faults</button>
-          <button data-filter="warn">Warnings</button>
-          <button data-filter="ok">Recovery</button>
+        <div><div class="eyebrow">事件轨迹</div><h2>${result.events.length} 个确定性事件</h2></div>
+        <div class="filters" aria-label="筛选事件轨迹">
+          <button class="active" data-filter="all">全部</button>
+          <button data-filter="fault">故障</button>
+          <button data-filter="warn">警告</button>
+          <button data-filter="ok">恢复</button>
         </div>
       </div>
       <ol class="timeline">${events}</ol>
     </section>
-    <footer><span>Generated by Sync Chaos Lab 0.1.0</span><span>No external assets · replay with ${escapeHtml(result.fingerprint)}</span></footer>
+    <footer><span>由 Sync Chaos Lab 0.1.1 生成</span><span>无外部资源 · 可用 ${escapeHtml(result.fingerprint)} 校验回放</span></footer>
   </main>
   <script type="application/json" id="sync-chaos-data">${embeddedJson}</script>
   <script>

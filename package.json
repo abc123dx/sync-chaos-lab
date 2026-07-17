@@ -1,7 +1,7 @@
 {
   "name": "sync-chaos-lab",
-  "version": "0.1.0",
-  "description": "Deterministic fault-injection and convergence lab for Automerge and Yjs local-first systems.",
+  "version": "0.1.1",
+  "description": "面向 Automerge 与 Yjs Local-first 系统的确定性故障注入与收敛实验室。",
   "license": "MIT",
   "keywords": [
     "automerge",

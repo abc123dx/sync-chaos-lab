@@ -38,13 +38,13 @@ export function createRandom(seed: string): RandomSource {
     },
     int(min, max) {
       if (!Number.isInteger(min) || !Number.isInteger(max) || max < min) {
-        throw new Error(`Invalid integer range: ${min}..${max}`);
+        throw new Error(`无效的整数范围：${min}..${max}`);
       }
       return min + Math.floor(next() * (max - min + 1));
     },
     pick<T>(values: readonly T[]): T {
       if (values.length === 0) {
-        throw new Error("Cannot pick from an empty collection");
+        throw new Error("无法从空集合中选取元素");
       }
       return values[Math.floor(next() * values.length)] as T;
     },
@@ -60,7 +60,7 @@ export function stableStringify(value: unknown): string {
     }
     if (input && typeof input === "object") {
       if (seen.has(input)) {
-        throw new TypeError("Cannot stringify a cyclic value");
+        throw new TypeError("无法序列化循环引用值");
       }
       seen.add(input);
       const entries = Object.entries(input as Record<string, unknown>)

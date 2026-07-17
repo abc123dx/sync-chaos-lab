@@ -16,7 +16,7 @@ export function reduceToReproducingPrefix<T>(
   reproduces: (prefix: readonly T[]) => boolean,
 ): PrefixReduction<T> {
   if (!reproduces(items)) {
-    throw new Error("The complete trace does not reproduce the target failure");
+    throw new Error("完整轨迹无法重现目标故障");
   }
 
   let low = 1;

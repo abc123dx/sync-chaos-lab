@@ -1,30 +1,24 @@
-# Security policy
+# 安全策略
 
-## Supported versions
+## 支持版本
 
-Security fixes are applied to the latest `0.1.x` release while the project is
-in its initial development phase.
+项目处于初始开发阶段时，安全修复适用于最新的 `0.1.x` 版本。
 
-## Reporting
+## 漏洞报告
 
-Use GitHub private vulnerability reporting from the repository's **Security**
-tab when it is available. Include:
+请优先使用仓库 **Security** 页面中的 GitHub 私密漏洞报告功能，并提供：
 
-- the affected version or commit;
-- a minimal reproduction;
-- expected and observed behavior;
-- impact and any known mitigations.
+- 受影响的版本或提交；
+- 最小重现步骤；
+- 预期行为与实际行为；
+- 影响范围和已知缓解措施。
 
-Do not include credentials, private document contents, access tokens or other
-secrets in a public issue. If private reporting is unavailable, open a public
-issue containing only sanitized metadata and request that a private channel be
-enabled.
+请勿在公开 Issue 中提交凭据、私密文档内容、访问令牌或其他秘密。如果私密报告
+不可用，可以只提交经过清理的公开元数据，并请求维护者启用私密渠道。
 
-## Scope
+## 范围
 
-Potential reportable issues include unsafe HTML report generation, arbitrary
-file writes outside an explicitly selected output path, dependency compromise,
-or crafted CRDT payloads that cause unexpected code execution.
+可报告的问题包括：不安全的 HTML 报告生成、向明确输出路径之外任意写文件、
+依赖供应链受损，或构造 CRDT 载荷导致意外代码执行。
 
-Incorrect convergence results without a security impact should use the normal
-bug-report workflow.
+如果收敛结果错误但不构成安全影响，请使用常规缺陷报告流程。
