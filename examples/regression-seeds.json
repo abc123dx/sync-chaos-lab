@@ -1,0 +1,30 @@
+[
+  {
+    "engine": "automerge",
+    "seed": "partition-amber-42",
+    "clientCount": 6,
+    "steps": 28,
+    "focus": "partition plus duplicate delivery"
+  },
+  {
+    "engine": "automerge",
+    "seed": "total-loss-recovery-09",
+    "clientCount": 4,
+    "steps": 16,
+    "focus": "forced recovery after sustained loss"
+  },
+  {
+    "engine": "yjs",
+    "seed": "replica-restart-slate-17",
+    "clientCount": 5,
+    "steps": 30,
+    "focus": "repeated replica restart"
+  },
+  {
+    "engine": "yjs",
+    "seed": "reorder-violet-88",
+    "clientCount": 10,
+    "steps": 24,
+    "focus": "maximum replica count and reorder pressure"
+  }
+]

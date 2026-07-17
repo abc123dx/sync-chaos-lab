@@ -1,0 +1,16 @@
+node_modules/
+dist/
+coverage/
+
+.DS_Store
+*.log
+*.pem
+
+.env
+.env.*
+!.env.example
+
+outputs/
+work/
+sync-chaos-*.json
+sync-chaos-*.html

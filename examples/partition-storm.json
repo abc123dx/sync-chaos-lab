@@ -1,0 +1,15 @@
+{
+  "seed": "partition-amber-42",
+  "engine": "automerge",
+  "clientCount": 6,
+  "steps": 28,
+  "network": {
+    "dropRate": 0.28,
+    "duplicateRate": 0.24,
+    "minDelay": 1,
+    "maxDelay": 6,
+    "reorderRate": 0.68,
+    "restartRate": 0.12,
+    "partition": true
+  }
+}

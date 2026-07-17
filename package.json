@@ -1,0 +1,51 @@
+{
+  "name": "sync-chaos-lab",
+  "version": "0.1.0",
+  "description": "Deterministic fault-injection and convergence lab for Automerge and Yjs local-first systems.",
+  "license": "MIT",
+  "keywords": [
+    "automerge",
+    "crdt",
+    "local-first",
+    "testing",
+    "yjs"
+  ],
+  "bin": {
+    "sync-chaos": "./dist/src/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run build:cli && vite build",
+    "build:cli": "tsc -p tsconfig.cli.json",
+    "preview": "vite preview",
+    "cli": "tsx src/cli.ts",
+    "test": "npm run build:cli && node --import tsx --test tests/*.test.ts",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.cli.json --noEmit",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build"
+  },
+  "dependencies": {
+    "@automerge/automerge": "^3.3.2",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "yjs": "^13.6.27"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.19",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.2",
+    "fast-check": "^4.3.0",
+    "tsx": "^4.20.6",
+    "typescript": "5.9.3",
+    "vite": "^8.1.5"
+  },
+  "type": "module"
+}

@@ -1,0 +1,15 @@
+{
+  "seed": "replica-restart-slate-17",
+  "engine": "yjs",
+  "clientCount": 5,
+  "steps": 30,
+  "network": {
+    "dropRate": 0.12,
+    "duplicateRate": 0.08,
+    "minDelay": 0,
+    "maxDelay": 4,
+    "reorderRate": 0.4,
+    "restartRate": 0.32,
+    "partition": true
+  }
+}
